@@ -1,0 +1,19 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  ml-api:
+    build: .
+    container_name: iris-predictor
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    volumes:
+      - ./app/model.pkl:/app/model.pkl:ro   # mount model as read-only
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

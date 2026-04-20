@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Flower Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 750px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f3c88;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            grid-column: span 2;
+            padding: 12px;
+            font-size: 16px;
+            background: #1f3c88;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #16306d;
+        }
+
+        .result, .error {
+            margin-top: 25px;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .result {
+            background: #eef7ee;
+            border: 1px solid #b7dfb7;
+        }
+
+        .error {
+            background: #fff0f0;
+            border: 1px solid #f0b3b3;
+            color: #b00020;
+        }
+
+        ul {
+            margin-top: 10px;
+        }
+
+        .footer-note {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Iris Flower Classifier</h1>
+        <div class="subtitle">
+            Enter four flower measurements and click Predict.
+        </div>
+
+        <form method="POST" action="/">
+            <input type="text" name="sepal_length" placeholder="Sepal Length" value="{{ values.sepal_length }}">
+            <input type="text" name="sepal_width" placeholder="Sepal Width" value="{{ values.sepal_width }}">
+            <input type="text" name="petal_length" placeholder="Petal Length" value="{{ values.petal_length }}">
+            <input type="text" name="petal_width" placeholder="Petal Width" value="{{ values.petal_width }}">
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <h3>Prediction: {{ prediction|capitalize }}</h3>
+            <strong>Probabilities:</strong>
+            <ul>
+                {% for label, prob in probabilities.items() %}
+                <li>{{ label|capitalize }}: {{ prob }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="footer-note">
+            JSON health endpoint: <code>/health</code><br>
+            JSON API endpoint: <code>/predict</code>
+        </div>
+    </div>
+</body>
+</html>
